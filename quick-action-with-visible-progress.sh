@@ -107,6 +107,22 @@ EOF
     done
 fi
 
+# Write selected files to a temporary file for Terminal to read
+FILES_LIST="/tmp/klasiko-files-$$.txt"
+printf '%s\n' "$@" > "$FILES_LIST"
+
+# Write configuration to a separate file (to avoid quote escaping issues in AppleScript)
+CONFIG_FILE="/tmp/klasiko-config-$$.txt"
+LOGO_ARG="NONE"
+[ -n "$LOGO_PATH" ] && LOGO_ARG="$LOGO_PATH"
+
+cat > "$CONFIG_FILE" << CONFIG_EOF
+THEME="$THEME"
+LOGO_PATH="$LOGO_ARG"
+LOGO_ARGS="$LOGO_ARGS"
+FILES_LIST="$FILES_LIST"
+CONFIG_EOF
+
 # Create a temporary script to run in Terminal
 TEMP_SCRIPT="/tmp/klasiko-conversion-$$.sh"
 cat > "$TEMP_SCRIPT" << 'SCRIPT_END'
@@ -118,15 +134,12 @@ echo "║          KLASIKO PDF CONVERSION - PROGRESS WINDOW          ║"
 echo "╚════════════════════════════════════════════════════════════╝"
 echo ""
 
-FILES=("$@")
-THEME="${FILES[0]}"
-LOGO_PATH="${FILES[1]}"
-LOGO_ARGS="${FILES[2]}"
+# Read configuration from config file
+CONFIG_FILE="$1"
+source "$CONFIG_FILE"
 
-# Remove first 3 elements (settings), rest are files
-FILES=("${FILES[@]:3}")
-
-for file in "${FILES[@]}"; do
+# Read files from the temporary file list
+while IFS= read -r file; do
     if [[ "$file" == *.md ]]; then
         filename=$(basename "$file")
         echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
@@ -141,7 +154,7 @@ for file in "${FILES[@]}"; do
             CMD="$CMD --logo \"$LOGO_PATH\" $LOGO_ARGS"
         fi
 
-        eval $CMD
+        eval "$CMD"
 
         if [ $? -eq 0 ]; then
             echo ""
@@ -152,7 +165,10 @@ for file in "${FILES[@]}"; do
         fi
         echo ""
     fi
-done
+done < "$FILES_LIST"
+
+# Clean up temporary files
+rm -f "$FILES_LIST" "$CONFIG_FILE"
 
 echo ""
 echo "╔════════════════════════════════════════════════════════════╗"
@@ -166,17 +182,13 @@ SCRIPT_END
 
 chmod +x "$TEMP_SCRIPT"
 
-# Pass settings and files to the script
-LOGO_ARG="NONE"
-[ -n "$LOGO_PATH" ] && LOGO_ARG="$LOGO_PATH"
-
-# Open Terminal and run the script with all files
+# Open Terminal and run the script (pass only the config file path - no quote escaping issues!)
 osascript <<EOF
 tell application "Terminal"
     activate
-    set newTab to do script "$TEMP_SCRIPT \"$THEME\" \"$LOGO_ARG\" \"$LOGO_ARGS\" $@"
+    set newTab to do script "$TEMP_SCRIPT \"$CONFIG_FILE\""
 end tell
 EOF
 
-# Clean up temp script after a delay
+# Clean up temp files after a delay (files list and config are cleaned by the script itself)
 (sleep 60; rm -f "$TEMP_SCRIPT") &
