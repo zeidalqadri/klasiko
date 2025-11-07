@@ -1,0 +1,10 @@
+# Markdown to PDF Converter - Required Dependencies
+
+# Core Markdown processing
+markdown>=3.5.0
+
+# PDF generation
+weasyprint>=60.0
+
+# Code syntax highlighting (optional but recommended)
+Pygments>=2.17.0

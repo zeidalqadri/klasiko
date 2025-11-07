@@ -1,0 +1,33 @@
+# Test files
+test-*.pdf
+test-*.md
+test-*.sh
+
+# Generated PDFs (except examples in docs)
+*.pdf
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# Virtual environment
+venv/
+env/
+ENV/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
