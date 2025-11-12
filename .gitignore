@@ -2,6 +2,7 @@
 test-*.pdf
 test-*.md
 test-*.sh
+test-*.svg
 
 # Generated PDFs (except examples in docs)
 *.pdf
@@ -31,3 +32,8 @@ Thumbs.db
 
 # Logs
 *.log
+
+# PyInstaller build artifacts
+build/
+dist/
+*.spec.bak

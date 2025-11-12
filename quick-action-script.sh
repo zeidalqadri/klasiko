@@ -33,8 +33,8 @@ do
         output_file="${file%.md}.pdf"
         filename=$(basename "$file")
 
-        # Run klasiko using the global command
-        klasiko "$file" -o "$output_file" --theme "$THEME" 2>&1
+        # Run klasiko using the packaged app
+        /Applications/Klasiko.app/Contents/MacOS/klasiko "$file" -o "$output_file" --theme "$THEME" 2>&1
 
         # Check result
         if [ $? -eq 0 ] && [ -f "$output_file" ]; then

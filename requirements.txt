@@ -8,3 +8,6 @@ weasyprint>=60.0
 
 # Code syntax highlighting (optional but recommended)
 Pygments>=2.17.0
+
+# Development/Packaging (optional - only needed for building distributable packages)
+# pyinstaller>=6.16.0

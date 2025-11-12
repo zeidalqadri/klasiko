@@ -62,8 +62,8 @@ do
         # Show starting notification
         osascript -e "display notification \"Starting conversion...\" with title \"⏳ $filename\""
 
-        # Build klasiko command
-        CMD="klasiko \"$file\" -o \"$output_file\" --theme \"$THEME\""
+        # Build klasiko command (using packaged app)
+        CMD="/Applications/Klasiko.app/Contents/MacOS/klasiko \"$file\" -o \"$output_file\" --theme \"$THEME\""
 
         # Add logo arguments if logo was selected
         if [ -n "$LOGO_PATH" ]; then

@@ -88,7 +88,7 @@ while IFS= read -r file; do
 
         output_file="${file%.md}.pdf"
 
-        CMD="klasiko \"$file\" -o \"$output_file\" --theme \"$THEME\""
+        CMD="/Applications/Klasiko.app/Contents/MacOS/klasiko \"$file\" -o \"$output_file\" --theme \"$THEME\""
 
         if [ -n "$LOGO_PATH" ] && [ "$LOGO_PATH" != "NONE" ]; then
             CMD="$CMD --logo \"$LOGO_PATH\" $LOGO_ARGS"
