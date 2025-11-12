@@ -1,6 +1,10 @@
-# Klasiko - Professional Markdown to PDF Converter
+<div align="center">
+  <img src="klasiko_k_monogram.png" alt="Klasiko Logo" width="200"/>
 
-A powerful Python script that converts Markdown files to beautifully styled PDF documents with **three visual themes** and professional formatting.
+  # Klasiko - Professional Markdown to PDF Converter
+
+  A powerful Python script that converts Markdown files to beautifully styled PDF documents with **three visual themes** and professional formatting.
+</div>
 
 ## Features
 

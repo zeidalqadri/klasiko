@@ -94,14 +94,14 @@ coll = COLLECT(
 app = BUNDLE(
     coll,
     name='Klasiko.app',
-    icon=None,  # TODO: Add custom icon if desired
+    icon='packaging/macos/klasiko.icns',
     bundle_identifier='com.klasiko.pdfconverter',
-    version='2.1.0',
+    version='2.1.1',
     info_plist={
         'CFBundleName': 'Klasiko',
         'CFBundleDisplayName': 'Klasiko PDF Converter',
-        'CFBundleShortVersionString': '2.1.0',
-        'CFBundleVersion': '2.1.0',
+        'CFBundleShortVersionString': '2.1.1',
+        'CFBundleVersion': '2.1.1',
         'CFBundlePackageType': 'APPL',
         'CFBundleExecutable': 'klasiko',
         'LSMinimumSystemVersion': '10.13.0',

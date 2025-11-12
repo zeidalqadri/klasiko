@@ -29,10 +29,11 @@ cd "$PROJECT_ROOT"
 # Configuration
 APP_NAME="Klasiko"
 APP_PATH="dist/Klasiko.app"
-DMG_NAME="Klasiko-2.1.0-macOS"
+DMG_NAME="Klasiko-2.1.1-macOS"
 DMG_PATH="dist/${DMG_NAME}.dmg"
 VOLUME_NAME="Klasiko PDF Converter"
 TMP_DMG_PATH="dist/tmp_${DMG_NAME}.dmg"
+ICON_FILE="packaging/macos/klasiko.icns"
 
 # Step 1: Verify app exists
 echo -e "${YELLOW}[1/6]${NC} Verifying Klasiko.app..."
@@ -121,6 +122,26 @@ fi
 
 DMG_SIZE_READABLE=$(du -sh "$DMG_PATH" | cut -f1)
 echo "  ✓ DMG size: $DMG_SIZE_READABLE"
+
+# Apply volume icon
+echo ""
+echo "Applying volume icon..."
+if [ -f "$ICON_FILE" ]; then
+    # Temporarily mount the DMG to apply the icon
+    TEMP_MOUNT=$(hdiutil attach "$DMG_PATH" 2>&1 | grep "/Volumes" | sed 's/.*\(\/Volumes\/.*\)/\1/')
+    if [ -n "$TEMP_MOUNT" ]; then
+        # Copy icon file to volume
+        cp "$ICON_FILE" "$TEMP_MOUNT/.VolumeIcon.icns"
+        # Set custom icon attribute
+        SetFile -c icnC "$TEMP_MOUNT/.VolumeIcon.icns" 2>/dev/null || true
+        SetFile -a C "$TEMP_MOUNT" 2>/dev/null || true
+        echo -e "${GREEN}  ✓ Volume icon applied${NC}"
+        # Unmount before verification
+        hdiutil detach "$TEMP_MOUNT" -quiet
+    fi
+else
+    echo -e "${YELLOW}  ! Icon file not found, skipping volume icon${NC}"
+fi
 
 # Test mounting DMG
 echo ""
