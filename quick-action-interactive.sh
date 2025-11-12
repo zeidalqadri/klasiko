@@ -2,130 +2,53 @@
 
 # Klasiko Interactive Quick Action
 # Multi-step dialog workflow for PDF conversion with logo branding
+# Uses shared dialog library for consistency
 
 SCRIPT_DIR="/Users/zeidalqadri/Desktop/klasiko"
+DIALOGS_LIB="$SCRIPT_DIR/lib/dialogs.sh"
+
+# Load shared dialog functions
+source "$DIALOGS_LIB"
 
 # Step 1: Choose theme
-THEME=$(osascript <<EOF
-tell application "System Events"
-    activate
-    set themeChoice to button returned of (display dialog "Choose PDF theme:" buttons {"Default", "Warm", "Rustic"} default button "Warm" with title "Klasiko PDF Converter - Step 1/4")
-    return themeChoice
-end tell
-EOF
-)
-
-# Check if user cancelled
-if [ -z "$THEME" ]; then
-    osascript -e 'display notification "Conversion cancelled" with title "Klasiko"'
+THEME=$(show_theme_dialog "Step 1/4")
+if [ $? -ne 0 ] || [ -z "$THEME" ]; then
+    show_cancel_notification
     exit 0
 fi
-
-# Convert theme to lowercase
-THEME=$(echo "$THEME" | tr '[:upper:]' '[:lower:]')
 
 # Step 2: Ask about logo
-LOGO_CHOICE=$(osascript <<EOF
-tell application "System Events"
-    activate
-    set logoChoice to button returned of (display dialog "Add company logo to PDF?" buttons {"No Logo", "Select Logo"} default button "No Logo" with title "Klasiko PDF Converter - Step 2/4")
-    return logoChoice
-end tell
-EOF
-)
-
-# Check if user cancelled
-if [ -z "$LOGO_CHOICE" ]; then
-    osascript -e 'display notification "Conversion cancelled" with title "Klasiko"'
+LOGO_CHOICE=$(show_logo_choice_dialog "Step 2/4")
+if [ $? -ne 0 ] || [ -z "$LOGO_CHOICE" ]; then
+    show_cancel_notification
     exit 0
 fi
 
-# Initialize logo variables
 LOGO_PATH=""
-LOGO_POSITION=""
-LOGO_SIZE=""
+LOGO_ARGS=""
 
-# Step 3: If user wants logo, show file picker
+# Steps 3-4: Logo file and placements (if logo selected)
 if [ "$LOGO_CHOICE" = "Select Logo" ]; then
-    LOGO_PATH=$(osascript <<EOF
-tell application "System Events"
-    activate
-    set logoFile to choose file with prompt "Select company logo:" of type {"PNG", "public.png", "SVG", "public.svg-image", "JPEG", "public.jpeg", "JPG"} default location (path to desktop folder)
-    return POSIX path of logoFile
-end tell
-EOF
-)
-
-    # Check if user cancelled file picker
-    if [ -z "$LOGO_PATH" ]; then
-        osascript -e 'display notification "Conversion cancelled - no logo selected" with title "Klasiko"'
+    # Step 3: File picker
+    LOGO_PATH=$(show_logo_file_picker "Step 3/4")
+    if [ $? -ne 0 ] || [ -z "$LOGO_PATH" ]; then
+        show_cancel_notification
         exit 0
     fi
 
-    # Step 4: Logo Placements (multi-select with position + size)
-    LOGO_OPTIONS=$(osascript <<EOF
-tell application "System Events"
-    activate
-
-    -- Combined position + size options
-    set logoOptionsList to {"Title Page - Small", "Title Page - Medium", "Title Page - Large", ¬
-                            "Header - Small", "Header - Medium", "Header - Large", ¬
-                            "Footer - Small", "Footer - Medium", "Footer - Large", ¬
-                            "Both Header & Footer - Small", "Both Header & Footer - Medium", "Both Header & Footer - Large", ¬
-                            "Watermark", ¬
-                            "Everywhere - Small", "Everywhere - Medium", "Everywhere - Large"}
-
-    set selectedOptions to choose from list logoOptionsList ¬
-        with prompt "Select logo placements (⌘-Click for multiple):" ¬
-        with multiple selections allowed ¬
-        default items {"Header - Medium"} ¬
-        with title "Klasiko PDF Converter - Step 3/4"
-
-    if selectedOptions is false then return ""
-
-    -- Join selected options with semicolon delimiter
-    set AppleScript's text item delimiters to ";"
-    set optionsString to selectedOptions as string
-    set AppleScript's text item delimiters to ""
-
-    return optionsString
-end tell
-EOF
-)
-
-    # Check if user cancelled
-    if [ -z "$LOGO_OPTIONS" ]; then
-        osascript -e 'display notification "Conversion cancelled" with title "Klasiko"'
+    # Step 4: Logo placements
+    LOGO_OPTIONS=$(show_logo_placements_dialog "Step 4/4")
+    if [ $? -ne 0 ] || [ -z "$LOGO_OPTIONS" ]; then
+        show_cancel_notification
         exit 0
     fi
 
-    # Parse multiple logo options (semicolon-separated)
-    # Format: "Title Page - Large;Header - Small;Footer - Small"
+    # Parse selections into CLI arguments
+    LOGO_ARGS=$(parse_logo_selections "$LOGO_OPTIONS")
+
+    # Count placements for notification
     IFS=';' read -ra LOGO_SELECTIONS <<< "$LOGO_OPTIONS"
-
-    # Build logo placement arguments
-    LOGO_ARGS=""
-    for selection in "${LOGO_SELECTIONS[@]}"; do
-        # Parse "Position - Size" format
-        POSITION=$(echo "$selection" | sed 's/ - .*//' | tr '[:upper:]' '[:lower:]' | sed 's/ /-/g')
-        SIZE=$(echo "$selection" | sed 's/.* - //' | tr '[:upper:]' '[:lower:]')
-
-        # Handle "Watermark" which has no size suffix
-        if [[ "$selection" == "Watermark" ]]; then
-            POSITION="watermark"
-            SIZE="medium"
-        fi
-
-        # Map friendly names to actual values
-        case "$POSITION" in
-            "title-page") POSITION="title" ;;
-            "both-header-&-footer") POSITION="both" ;;
-            "everywhere") POSITION="all" ;;
-        esac
-
-        # Add to arguments
-        LOGO_ARGS="$LOGO_ARGS --logo-placement \"$POSITION:$SIZE\""
-    done
+    PLACEMENT_COUNT=${#LOGO_SELECTIONS[@]}
 fi
 
 # Process each selected file
@@ -154,8 +77,6 @@ do
         if [ $? -eq 0 ] && [ -f "$output_file" ]; then
             # Success notification with details
             if [ -n "$LOGO_PATH" ]; then
-                # Count placements
-                PLACEMENT_COUNT=$(echo "$LOGO_SELECTIONS" | wc -w | tr -d ' ')
                 if [ "$PLACEMENT_COUNT" -gt 1 ]; then
                     osascript -e "display notification \"Theme: $THEME + logo ($PLACEMENT_COUNT positions)\" with title \"✅ $filename\" sound name \"Glass\""
                 else
