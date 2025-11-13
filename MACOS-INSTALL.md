@@ -24,80 +24,31 @@ If you downloaded Klasiko from GitHub Releases, you may see this error when tryi
 
 Choose the method that works best for you:
 
-### Method 1: Automated Installer (Recommended) ⭐
+### Method 1: Standard Installation (Recommended) ⭐
 
-**Easiest and fastest way to install Klasiko**
+**Simple 4-step process:**
 
-1. **Download both files** from the GitHub release:
-   - `Klasiko-X.X.X-macOS.dmg`
-   - `install-klasiko-macos.sh`
+1. **Download** `Klasiko-X.X.X-macOS.dmg` from [GitHub Releases](https://github.com/zeidalqadri/klasiko/releases)
 
-2. **Open Terminal** and navigate to your Downloads folder:
+2. **Install** - Open the DMG and drag Klasiko.app to Applications folder
+
+3. **Remove quarantine** - Open Terminal and run:
    ```bash
-   cd ~/Downloads
+   xattr -cr /Applications/Klasiko.app
    ```
 
-3. **Run the installer**:
-   ```bash
-   bash install-klasiko-macos.sh
-   ```
+   This removes the `com.apple.quarantine` flag that causes the "damaged app" error.
 
-4. **Enter your password** when prompted (to create command-line shortcut)
+4. **Open** Klasiko from Applications folder
 
-5. **Done!** Open Klasiko from Applications or use `klasiko` command in Terminal
-
-**What the script does:**
-- Mounts the DMG
-- Copies Klasiko to Applications
-- **Removes the quarantine attribute** (the key fix!)
-- Creates a command-line symlink at `/usr/local/bin/klasiko`
-- Verifies installation
-- Unmounts the DMG
-
----
-
-### Method 2: Manual Installation
-
-If you prefer to do it yourself:
-
-#### Step 1: Install the App
-
-1. Download `Klasiko-X.X.X-macOS.dmg` from GitHub Releases
-2. Double-click the DMG to mount it
-3. Drag `Klasiko.app` to the Applications folder
-4. Eject the DMG
-
-#### Step 2: Remove Quarantine (Critical!)
-
-Open Terminal and run:
-
-```bash
-xattr -cr /Applications/Klasiko.app
-```
-
-**What this command does:**
-- `xattr` - Extended attributes tool
-- `-c` - Clear all attributes
-- `-r` - Recursive (all files in the app bundle)
-- Removes the `com.apple.quarantine` flag
-
-#### Step 3: Create Command-Line Shortcut (Optional)
-
-To use `klasiko` from Terminal:
-
+**Optional**: Create command-line shortcut to use `klasiko` from Terminal:
 ```bash
 sudo ln -sf /Applications/Klasiko.app/Contents/MacOS/klasiko /usr/local/bin/klasiko
 ```
 
-#### Step 4: Open Klasiko
-
-- Go to Applications folder
-- Double-click Klasiko
-- It should open normally now!
-
 ---
 
-### Method 3: Install from Source
+### Method 2: Install from Source
 
 If you prefer to run from Python source:
 
@@ -274,12 +225,10 @@ The `xattr -cr` command simply tells macOS: "I trust this app, stop quarantining
 
 ## Comparison: Installation Methods
 
-| Method | Ease | Speed | CLI Access | Auto-Updates |
-|--------|------|-------|------------|--------------|
-| **Automated Script** | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ✅ Yes | Manual |
-| **Manual + xattr** | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ | Optional | Manual |
-| **Right-Click Open** | ⭐⭐⭐ | ⭐⭐⭐ | Optional | Manual |
-| **Python Source** | ⭐⭐ | ⭐⭐ | ✅ Yes | `git pull` |
+| Method | Ease | CLI Access | Auto-Updates |
+|--------|------|------------|--------------|
+| **DMG + xattr** | ⭐⭐⭐⭐ Simple (4 steps) | Optional | Manual |
+| **Python Source** | ⭐⭐ Requires Python | ✅ Yes | `git pull` |
 
 ---
 

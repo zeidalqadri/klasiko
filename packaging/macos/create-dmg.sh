@@ -149,43 +149,22 @@ else
     echo -e "${YELLOW}  ! Warning: Could not mount DMG for verification${NC}"
 fi
 
-# Step 7: Generate installation helper script
-echo ""
-echo -e "${YELLOW}[7/7]${NC} Generating installation helper script..."
-
-INSTALL_SCRIPT="dist/install-klasiko-macos.sh"
-
-if [ -f "$PROJECT_ROOT/install-klasiko-macos.sh" ]; then
-    cp "$PROJECT_ROOT/install-klasiko-macos.sh" "$INSTALL_SCRIPT"
-    chmod +x "$INSTALL_SCRIPT"
-    echo -e "${GREEN}  ✓ Installation script copied to dist/${NC}"
-else
-    echo -e "${YELLOW}  ! Installation script not found in project root${NC}"
-    echo "    Expected: $PROJECT_ROOT/install-klasiko-macos.sh"
-fi
-
 # Success summary
 echo ""
 echo -e "${GREEN}╔════════════════════════════════════════════════════════════╗${NC}"
 echo -e "${GREEN}║${NC}                  DMG CREATION SUCCESSFUL!                 ${GREEN}║${NC}"
 echo -e "${GREEN}╚════════════════════════════════════════════════════════════╝${NC}"
 echo ""
-echo -e "DMG location:            ${BLUE}$DMG_PATH${NC}"
-echo -e "DMG size:                ${BLUE}$DMG_SIZE_READABLE${NC}"
-echo -e "Install script location: ${BLUE}$INSTALL_SCRIPT${NC}"
+echo -e "DMG location: ${BLUE}$DMG_PATH${NC}"
+echo -e "DMG size:     ${BLUE}$DMG_SIZE_READABLE${NC}"
 echo ""
 echo "Distribution ready!"
 echo ""
-echo -e "${GREEN}For GitHub Releases, upload BOTH files:${NC}"
-echo -e "  ${BLUE}1.${NC} $DMG_PATH"
-echo -e "  ${BLUE}2.${NC} $INSTALL_SCRIPT ${YELLOW}(helps users bypass 'damaged app' error)${NC}"
+echo -e "${GREEN}Installation instructions for users:${NC}"
+echo "  1. Download and open the DMG"
+echo "  2. Drag Klasiko.app to Applications folder"
+echo -e "  3. Open Terminal and run: ${BLUE}xattr -cr /Applications/Klasiko.app${NC}"
+echo "  4. Launch Klasiko from Applications folder"
 echo ""
-echo "Users should download both and run:"
-echo -e "  ${BLUE}bash install-klasiko-macos.sh${NC}"
-echo ""
-echo "Manual installation:"
-echo "  • Double-click DMG to mount"
-echo "  • Drag Klasiko.app to Applications folder"
-echo "  • Run: xattr -cr /Applications/Klasiko.app"
-echo "  • Eject the DMG when done"
+echo -e "${YELLOW}Note: Step 3 is required for unsigned apps downloaded from GitHub${NC}"
 echo ""
