@@ -42,22 +42,65 @@ See [THEME-GUIDE.md](THEME-GUIDE.md) for detailed theme comparison and usage gui
 
 ## Installation
 
-### 1. Clone or download the project
+### Windows Installer (Recommended for Windows Users)
 
-### 2. Set up virtual environment
+Download and run the Windows installer:
+1. Download `Klasiko-2.1.1-Windows-Setup.exe` from releases
+2. Run the installer
+3. Choose options:
+   - ✓ Add to PATH (recommended) - use `klasiko` from any command prompt
+   - ✓ Associate .md files - right-click .md files to convert
+   - ✓ Start Menu shortcuts
+4. Done! Use `klasiko` command from anywhere
+
+See [WINDOWS-BUILD.md](WINDOWS-BUILD.md) for building from source on Windows.
+
+### Python Installation (All Platforms)
+
+#### 1. Clone or download the project
+
+#### 2. Set up virtual environment
 ```bash
+# macOS/Linux
 python3 -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+source venv/bin/activate
+
+# Windows
+python -m venv venv
+venv\Scripts\activate
 ```
 
-### 3. Install dependencies
+#### 3. Install dependencies
 ```bash
 pip install -r requirements.txt
 ```
 
+**Note for Windows**: WeasyPrint requires GTK3 libraries. The installer bundles these automatically. For Python installation, GTK3 will be installed with WeasyPrint's wheel package.
+
 ## Usage
 
-### Basic Conversion (Warm Theme - Default)
+### Graphical User Interface (GUI) - Cross-Platform
+
+For users who prefer a graphical interface:
+
+```bash
+# Launch the GUI
+python klasiko-gui.py
+```
+
+The GUI provides:
+- File browser for input/output files
+- Visual theme selection with descriptions
+- Logo placement with multi-position support
+- Metadata fields (author, subject, keywords)
+- Live output display during conversion
+- Automatic PDF opening after conversion
+
+**Windows users**: The installer can create a Start Menu shortcut for the GUI.
+
+### Command Line Interface
+
+#### Basic Conversion (Warm Theme - Default)
 ```bash
 python klasiko.py document.md
 ```
