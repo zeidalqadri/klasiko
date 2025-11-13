@@ -42,10 +42,29 @@ See [THEME-GUIDE.md](THEME-GUIDE.md) for detailed theme comparison and usage gui
 
 ## Installation
 
+### macOS (DMG Download)
+
+⚠️ **Important**: macOS may show "app is damaged" error for unsigned apps.
+
+**Quick Install (Recommended)**:
+```bash
+# Download both files from releases, then:
+cd ~/Downloads
+bash install-klasiko-macos.sh
+```
+
+**Manual Install**:
+1. Download `Klasiko-X.X.X-macOS.dmg` from [releases](https://github.com/zeidalqadri/klasiko/releases)
+2. Drag Klasiko to Applications
+3. Run: `xattr -cr /Applications/Klasiko.app`
+4. Open from Applications folder
+
+📖 **See [MACOS-INSTALL.md](MACOS-INSTALL.md) for detailed installation guide and troubleshooting**
+
 ### Windows Installer (Recommended for Windows Users)
 
 Download and run the Windows installer:
-1. Download `Klasiko-2.1.1-Windows-Setup.exe` from releases
+1. Download `Klasiko-2.2.0-Windows-Setup.exe` from releases
 2. Run the installer
 3. Choose options:
    - ✓ Add to PATH (recommended) - use `klasiko` from any command prompt

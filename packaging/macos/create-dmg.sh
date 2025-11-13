@@ -36,7 +36,7 @@ TMP_DMG_PATH="dist/tmp_${DMG_NAME}.dmg"
 ICON_FILE="packaging/macos/klasiko.icns"
 
 # Step 1: Verify app exists
-echo -e "${YELLOW}[1/6]${NC} Verifying Klasiko.app..."
+echo -e "${YELLOW}[1/7]${NC} Verifying Klasiko.app..."
 if [ ! -d "$APP_PATH" ]; then
     echo -e "${RED}Error: $APP_PATH not found${NC}"
     echo "Please run ./packaging/macos/build-mac.sh first"
@@ -46,7 +46,7 @@ echo "  ✓ Found Klasiko.app"
 echo ""
 
 # Step 2: Clean previous DMG
-echo -e "${YELLOW}[2/6]${NC} Cleaning previous DMG files..."
+echo -e "${YELLOW}[2/7]${NC} Cleaning previous DMG files..."
 if [ -f "$DMG_PATH" ]; then
     rm -f "$DMG_PATH"
     echo "  ✓ Removed old DMG"
@@ -58,7 +58,7 @@ fi
 echo ""
 
 # Step 3: Create temporary DMG staging directory
-echo -e "${YELLOW}[3/6]${NC} Creating DMG staging area..."
+echo -e "${YELLOW}[3/7]${NC} Creating DMG staging area..."
 STAGING_DIR="dist/dmg_staging"
 if [ -d "$STAGING_DIR" ]; then
     rm -rf "$STAGING_DIR"
@@ -78,7 +78,7 @@ echo "  ✓ Created symlink"
 echo ""
 
 # Step 4: Calculate required DMG size
-echo -e "${YELLOW}[4/6]${NC} Calculating DMG size..."
+echo -e "${YELLOW}[4/7]${NC} Calculating DMG size..."
 APP_SIZE=$(du -sm "$APP_PATH" | cut -f1)
 # Add 50MB buffer for filesystem overhead
 DMG_SIZE=$((APP_SIZE + 50))
@@ -87,7 +87,7 @@ echo "  ✓ DMG size: ${DMG_SIZE}MB"
 echo ""
 
 # Step 5: Create DMG
-echo -e "${YELLOW}[5/6]${NC} Creating DMG image..."
+echo -e "${YELLOW}[5/7]${NC} Creating DMG image..."
 echo "  → This may take a minute..."
 
 # Create the DMG with proper settings
@@ -110,7 +110,7 @@ fi
 echo ""
 
 # Step 6: Cleanup and verification
-echo -e "${YELLOW}[6/6]${NC} Finalizing..."
+echo -e "${YELLOW}[6/7]${NC} Finalizing..."
 rm -rf "$STAGING_DIR"
 echo "  ✓ Cleaned up staging directory"
 
@@ -165,17 +165,43 @@ else
     echo -e "${YELLOW}  ! Warning: Could not mount DMG for verification${NC}"
 fi
 
+# Step 7: Generate installation helper script
+echo ""
+echo -e "${YELLOW}[7/7]${NC} Generating installation helper script..."
+
+INSTALL_SCRIPT="dist/install-klasiko-macos.sh"
+
+if [ -f "$PROJECT_ROOT/install-klasiko-macos.sh" ]; then
+    cp "$PROJECT_ROOT/install-klasiko-macos.sh" "$INSTALL_SCRIPT"
+    chmod +x "$INSTALL_SCRIPT"
+    echo -e "${GREEN}  ✓ Installation script copied to dist/${NC}"
+else
+    echo -e "${YELLOW}  ! Installation script not found in project root${NC}"
+    echo "    Expected: $PROJECT_ROOT/install-klasiko-macos.sh"
+fi
+
 # Success summary
 echo ""
 echo -e "${GREEN}╔════════════════════════════════════════════════════════════╗${NC}"
 echo -e "${GREEN}║${NC}                  DMG CREATION SUCCESSFUL!                 ${GREEN}║${NC}"
 echo -e "${GREEN}╚════════════════════════════════════════════════════════════╝${NC}"
 echo ""
-echo -e "DMG location: ${BLUE}$DMG_PATH${NC}"
-echo -e "DMG size:     ${BLUE}$DMG_SIZE_READABLE${NC}"
+echo -e "DMG location:            ${BLUE}$DMG_PATH${NC}"
+echo -e "DMG size:                ${BLUE}$DMG_SIZE_READABLE${NC}"
+echo -e "Install script location: ${BLUE}$INSTALL_SCRIPT${NC}"
 echo ""
 echo "Distribution ready!"
+echo ""
+echo -e "${GREEN}For GitHub Releases, upload BOTH files:${NC}"
+echo -e "  ${BLUE}1.${NC} $DMG_PATH"
+echo -e "  ${BLUE}2.${NC} $INSTALL_SCRIPT ${YELLOW}(helps users bypass 'damaged app' error)${NC}"
+echo ""
+echo "Users should download both and run:"
+echo -e "  ${BLUE}bash install-klasiko-macos.sh${NC}"
+echo ""
+echo "Manual installation:"
 echo "  • Double-click DMG to mount"
 echo "  • Drag Klasiko.app to Applications folder"
+echo "  • Run: xattr -cr /Applications/Klasiko.app"
 echo "  • Eject the DMG when done"
 echo ""
