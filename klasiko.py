@@ -367,6 +367,9 @@ def get_default_theme_css():
             margin-top: 1.5em;
             margin-bottom: 0.5em;
             page-break-after: avoid;
+            break-after: avoid;
+            page-break-inside: avoid;
+            break-inside: avoid;
         }
 
         h1 {
@@ -382,6 +385,16 @@ def get_default_theme_css():
             font-size: 16pt;
             border-bottom: 1px solid #eee;
             padding-bottom: 0.3em;
+            page-break-before: always;
+            break-before: page;
+        }
+
+        /* First h2 after title should not force page break */
+        .content > h2:first-child,
+        h1 + h2,
+        hr + h2 {
+            page-break-before: avoid;
+            break-before: avoid;
         }
 
         h3 {
@@ -439,6 +452,22 @@ def get_default_theme_css():
             border-collapse: collapse;
             margin: 1em 0;
             font-size: 11pt;
+            page-break-inside: auto;
+            break-inside: auto;
+        }
+
+        tr {
+            page-break-inside: avoid;
+            break-inside: avoid;
+        }
+
+        thead {
+            display: table-header-group;
+        }
+
+        thead tr {
+            page-break-after: avoid;
+            break-after: avoid;
         }
 
         table.long-table {
@@ -669,6 +698,9 @@ def get_warm_theme_css():
             margin-top: 1.8em;
             margin-bottom: 0.7em;
             page-break-after: avoid;
+            break-after: avoid;
+            page-break-inside: avoid;
+            break-inside: avoid;
         }
 
         h1 {
@@ -689,6 +721,16 @@ def get_warm_theme_css():
             border-bottom: 2px solid #D4C4B5;
             padding-bottom: 0.4em;
             font-variant: small-caps;
+            page-break-before: always;
+            break-before: page;
+        }
+
+        /* First h2 after title should not force page break */
+        .content > h2:first-child,
+        h1 + h2,
+        hr + h2 {
+            page-break-before: avoid;
+            break-before: avoid;
         }
 
         h3 {
@@ -751,6 +793,22 @@ def get_warm_theme_css():
             margin: 1.5em 0;
             font-size: 10.5pt;
             border: 2px solid #9B8579;
+            page-break-inside: auto;
+            break-inside: auto;
+        }
+
+        tr {
+            page-break-inside: avoid;
+            break-inside: avoid;
+        }
+
+        thead {
+            display: table-header-group;
+        }
+
+        thead tr {
+            page-break-after: avoid;
+            break-after: avoid;
         }
 
         table.long-table {
@@ -1008,6 +1066,9 @@ def get_rustic_theme_css():
             margin-top: 2em;
             margin-bottom: 0.8em;
             page-break-after: avoid;
+            break-after: avoid;
+            page-break-inside: avoid;
+            break-inside: avoid;
         }
 
         h1 {
@@ -1037,6 +1098,16 @@ def get_rustic_theme_css():
             border-bottom: 2px solid #A0826D;
             padding-bottom: 0.5em;
             font-variant: small-caps;
+            page-break-before: always;
+            break-before: page;
+        }
+
+        /* First h2 after title should not force page break */
+        .content > h2:first-child,
+        h1 + h2,
+        hr + h2 {
+            page-break-before: avoid;
+            break-before: avoid;
         }
 
         h3 {
@@ -1114,6 +1185,22 @@ def get_rustic_theme_css():
             margin: 1.5em 0;
             font-size: 10.5pt;
             border: 2px solid #8B7355;
+            page-break-inside: auto;
+            break-inside: auto;
+        }
+
+        tr {
+            page-break-inside: avoid;
+            break-inside: avoid;
+        }
+
+        thead {
+            display: table-header-group;
+        }
+
+        thead tr {
+            page-break-after: avoid;
+            break-after: avoid;
         }
 
         table.long-table {
