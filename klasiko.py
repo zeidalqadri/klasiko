@@ -1520,12 +1520,304 @@ def generate_logo_css(logo_data_uri, logo_position='header', logo_size='medium')
     return logo_css
 
 
+def get_clean_theme_css():
+    """
+    Return CSS for the clean modern theme.
+    Sans-serif typography, minimal decoration, maximum readability.
+    """
+    return """
+        @page {
+            size: A4;
+            margin: 2.5cm 2cm;
+
+            @top-left {
+                content: "";
+            }
+
+            @top-center {
+                content: "";
+            }
+
+            @top-right {
+                content: "";
+            }
+
+            @bottom-left {
+                content: "";
+            }
+
+            @bottom-center {
+                content: counter(page);
+                font-size: 9pt;
+                color: #666;
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+            }
+
+            @bottom-right {
+                content: "";
+            }
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+            font-size: 11pt;
+            line-height: 1.7;
+            color: #1a1a1a;
+            text-align: left;
+            margin: 0;
+            padding: 0;
+            background: #fff;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+            font-weight: 600;
+            color: #111;
+            margin-top: 1.8em;
+            margin-bottom: 0.6em;
+            line-height: 1.3;
+            page-break-after: avoid;
+            break-after: avoid;
+            page-break-inside: avoid;
+            break-inside: avoid;
+        }
+
+        h1 {
+            font-size: 24pt;
+            font-weight: 700;
+            text-align: left;
+            margin-top: 0;
+            margin-bottom: 1em;
+            padding-bottom: 0.5em;
+            border-bottom: 3px solid #111;
+        }
+
+        h2 {
+            font-size: 18pt;
+            font-weight: 600;
+            padding-bottom: 0.3em;
+            border-bottom: 1px solid #e0e0e0;
+            page-break-before: always;
+            break-before: page;
+        }
+
+        /* First h2 after title should not force page break */
+        .content > h2:first-child,
+        h1 + h2,
+        hr + h2 {
+            page-break-before: avoid;
+            break-before: avoid;
+        }
+
+        h3 {
+            font-size: 14pt;
+            font-weight: 600;
+            color: #333;
+        }
+
+        h4 {
+            font-size: 12pt;
+            font-weight: 600;
+            color: #444;
+        }
+
+        h5, h6 {
+            font-size: 11pt;
+            font-weight: 600;
+            color: #555;
+        }
+
+        p {
+            margin-top: 0;
+            margin-bottom: 1em;
+        }
+
+        a {
+            color: #0066cc;
+            text-decoration: none;
+        }
+
+        blockquote {
+            margin: 1.5em 0;
+            padding: 0.8em 1.2em;
+            border-left: 4px solid #0066cc;
+            background: #f8f9fa;
+            font-style: normal;
+            color: #333;
+        }
+
+        blockquote p:last-child {
+            margin-bottom: 0;
+        }
+
+        pre {
+            font-family: 'SF Mono', 'Monaco', 'Menlo', 'Consolas', 'Liberation Mono', monospace;
+            font-size: 9.5pt;
+            background: #f6f8fa;
+            border: 1px solid #e1e4e8;
+            border-radius: 6px;
+            padding: 1em;
+            margin: 1em 0;
+            overflow-x: auto;
+            line-height: 1.5;
+        }
+
+        code {
+            font-family: 'SF Mono', 'Monaco', 'Menlo', 'Consolas', 'Liberation Mono', monospace;
+            font-size: 9.5pt;
+            background: #f6f8fa;
+            padding: 0.2em 0.4em;
+            border-radius: 3px;
+        }
+
+        pre code {
+            background: none;
+            padding: 0;
+            border-radius: 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5em 0;
+            font-size: 10.5pt;
+            page-break-inside: auto;
+            break-inside: auto;
+        }
+
+        tr {
+            page-break-inside: avoid;
+            break-inside: avoid;
+        }
+
+        thead {
+            display: table-header-group;
+        }
+
+        thead tr {
+            page-break-after: avoid;
+            break-after: avoid;
+        }
+
+        th {
+            background: #f6f8fa;
+            font-weight: 600;
+            text-align: left;
+            padding: 0.75em 1em;
+            border-bottom: 2px solid #d0d7de;
+        }
+
+        td {
+            padding: 0.75em 1em;
+            border-bottom: 1px solid #e1e4e8;
+            vertical-align: top;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        ul, ol {
+            margin: 1em 0;
+            padding-left: 1.8em;
+        }
+
+        li {
+            margin-bottom: 0.4em;
+            line-height: 1.6;
+        }
+
+        hr {
+            border: none;
+            border-top: 1px solid #e1e4e8;
+            margin: 2em 0;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        /* TOC Styling */
+        .toc {
+            background: #f8f9fa;
+            border: 1px solid #e1e4e8;
+            border-radius: 6px;
+            padding: 1.5em 2em;
+            margin-bottom: 2em;
+        }
+
+        .toc-title {
+            font-size: 14pt;
+            font-weight: 600;
+            margin-bottom: 1em;
+            color: #111;
+        }
+
+        .toc ul {
+            list-style: none;
+            padding-left: 0;
+            margin: 0;
+        }
+
+        .toc li {
+            margin-bottom: 0.3em;
+        }
+
+        .toc ul ul {
+            padding-left: 1.5em;
+            margin-top: 0.3em;
+        }
+
+        .toc a {
+            color: #333;
+            text-decoration: none;
+        }
+
+        .toc a:hover {
+            color: #0066cc;
+        }
+
+        /* Front matter */
+        .front-matter {
+            margin-bottom: 2em;
+            padding-bottom: 1em;
+            border-bottom: 1px solid #e1e4e8;
+        }
+
+        .front-matter p {
+            margin: 0.3em 0;
+            color: #666;
+            font-size: 10pt;
+        }
+
+        /* Logo styling */
+        .logo-title, .logo-header, .logo-footer {
+            text-align: center;
+        }
+
+        .logo-title img {
+            margin-bottom: 1.5em;
+        }
+
+        /* Footer note */
+        .footer-note {
+            margin-top: 3em;
+            padding-top: 1em;
+            border-top: 1px solid #e1e4e8;
+            font-size: 9pt;
+            color: #666;
+            text-align: center;
+        }
+    """
+
+
 def get_theme_css(theme='warm'):
     """
     Get CSS for the specified theme.
 
     Args:
-        theme (str): Theme name - 'default', 'warm', or 'rustic'
+        theme (str): Theme name - 'default', 'warm', 'rustic', or 'clean'
 
     Returns:
         str: CSS string for the theme
@@ -1533,7 +1825,8 @@ def get_theme_css(theme='warm'):
     themes = {
         'default': get_default_theme_css,
         'warm': get_warm_theme_css,
-        'rustic': get_rustic_theme_css
+        'rustic': get_rustic_theme_css,
+        'clean': get_clean_theme_css
     }
 
     theme_function = themes.get(theme, get_warm_theme_css)
@@ -1551,7 +1844,7 @@ def create_complete_html_document(html_content, title, toc_html=None, custom_css
         custom_css (str): Optional custom CSS to append
         metadata (dict): Optional PDF metadata (author, subject, keywords)
         front_matter (dict): Optional front matter extracted from document (h2, h3, metadata)
-        theme (str): Visual theme - 'default', 'warm', or 'rustic'
+        theme (str): Visual theme - 'default', 'warm', 'rustic', or 'clean'
         logo_data_uri (str): Optional base64-encoded logo data URI
         logo_placements (list): List of dicts with 'position' and 'size' keys for each logo placement
 
@@ -1666,7 +1959,7 @@ def convert_md_to_pdf(input_file, output_file, enable_toc=False, custom_css=None
         enable_toc (bool): Whether to generate table of contents
         custom_css (str): Path to custom CSS file or CSS string
         metadata (dict): PDF metadata (author, subject, keywords)
-        theme (str): Visual theme - 'default', 'warm', or 'rustic'
+        theme (str): Visual theme - 'default', 'warm', 'rustic', or 'clean'
         logo_data_uri (str): Optional base64-encoded logo data URI
         logo_placements (list): List of dicts with 'position' and 'size' keys for each logo placement
 
@@ -1860,7 +2153,7 @@ Features:
 
     parser.add_argument(
         '--theme',
-        choices=['default', 'warm', 'rustic'],
+        choices=['default', 'warm', 'rustic', 'clean'],
         default='warm',
         help='Visual theme for PDF output (default: warm)'
     )
